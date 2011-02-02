@@ -1,0 +1,28 @@
+h1. Overview
+
+This is a work in progres..
+
+Table abstraction.
+
+
+h1. Command Line Utilities
+
+h2. rec-view
+
+Limitations: only understands tab delimited encoding.
+
+<pre>
+cat foo.tab | rec-view | less
+</pre>
+
+h2. atcat
+
+Limitations: only implemented 'driver' is dbi.  Only supported output port is stdout as tab delimited.
+
+<pre>
+atcat dbi://user:pass@Pg/localhost/db_name/table_name | rec-view | less
+</pre>
+
+h1. License
+
+h1. Authors

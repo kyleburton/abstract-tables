@@ -1,0 +1,114 @@
+#!/usr/bin/env ruby
+#
+# Pipe mysql through this:
+#
+#    mysql -uuser database_name -e 'select * from some_table' | rec-view.rb
+#
+# and it will produce a 'portrait' view of the records
+#
+# Record[1]
+# [  1] ID   : 1
+# [  2] FNAME: Kyle
+# [  3] LNAME: Burton
+# [  4] CITY : Philadelphia
+# [  5] ST   : PA
+# [  6] ZIP  : 19101
+# 
+# Record[2]
+# [  1] ID   : 2
+# [  2] FNAME: Alan
+# [  3] LNAME: Barton
+# [  4] CITY : Newardk
+# [  5] ST   : DE
+# [  6] ZIP  : 10817
+#
+require 'optparse'
+
+$options = {:no_hdr => false}
+OptionParser.new do |opts|
+  opts.banner = "Usage: #$0 [options]"
+
+  opts.on("-s", "--sort", "Sort the fields before display") do |v|
+    $options[:sort_fields] = v
+  end
+
+  opts.on("-f", "--fields FIELDS", "Specify the fields as a comma delimited string") do |v|
+    $options[:fields] = v
+  end
+
+  opts.on("-c", "--const N:V,N:V,...", "Specify constant field values, always prefixed, comma separated") do |v|
+    $options[:constant_fields] = v
+  end
+
+  opts.on("-r", "--raw", "Raw output, just tab delimited") do |v|
+    $options[:raw] = v
+  end
+
+  opts.on("-n", "--no-header", "Suppress printing the header for --raw") do |v|
+    $options[:no_hdr] = true
+  end
+
+end.parse!
+
+def constant_field_names
+  $options[:constant_fields].split(/,/).map { |pair|
+    pair.split(/:/)[0]
+  }
+end
+
+def constant_field_values
+  $options[:constant_fields].split(/,/).map { |pair|
+    pair.split(/:/)[1]
+  }
+end
+
+fields = []
+if $options[:fields]
+  fields = $options[:fields].split(/,/)
+else
+  header_line = $stdin.readline
+  fields = header_line.split(/\t/)
+  fields[-1].chomp!
+end
+
+fields.unshift(*constant_field_names) if $options[:constant_fields]
+
+orig_order_map = {}
+fields.each_with_index do |field,idx|
+  orig_order_map[field] = idx
+end
+sorted_fields = $options[:sort_fields] ? fields.sort : fields
+
+max_width = fields.map {|f| f.size}.max
+recno = 0
+
+if $options[:raw]
+  puts fields.join("\t") if !$options[:no_hdr]
+  $stdin.each do |line|
+    recno = recno + 1
+    rec = line.split(/\t/)
+    rec[-1].chomp!
+    rec.unshift(*constant_field_values) if $options[:constant_fields]
+    puts rec.join("\t")
+  end
+  exit 0
+end
+
+$stdin.each do |line|
+  recno = recno + 1
+  puts "Record[#{recno}]"
+  rec = line.split(/\t/)
+  rec[-1].chomp!
+  rec.unshift(*constant_field_values) if $options[:constant_fields]
+  rows = []
+  sorted_fields.each_with_index do |field,idx|
+    actual_idx = orig_order_map[field]
+    rows << sprintf( "[% 3d] %-*s: %s\n", 1+idx, max_width, field, rec[actual_idx] )
+  end
+  if $options[:sort_fields]
+    puts rows.sort
+  else
+    puts rows
+  end
+  puts ""
+end
