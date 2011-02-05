@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+require 'rubygems'
+require 'abtab'
+
 #
 # Pipe mysql through this:
 #
@@ -22,93 +25,112 @@
 # [  5] ST   : DE
 # [  6] ZIP  : 10817
 #
+
 require 'optparse'
 
-$options = {:no_hdr => false}
-OptionParser.new do |opts|
-  opts.banner = "Usage: #$0 [options]"
+# $options = {:no_hdr => false}
+# OptionParser.new do |opts|
+#   opts.banner = "Usage: #$0 [options]"
+# 
+#   opts.on("-s", "--sort", "Sort the fields before display") do |v|
+#     $options[:sort_fields] = v
+#   end
+# 
+#   opts.on("-f", "--fields FIELDS", "Specify the fields as a comma delimited string") do |v|
+#     $options[:fields] = v
+#   end
+# 
+#   opts.on("-c", "--const N:V,N:V,...", "Specify constant field values, always prefixed, comma separated") do |v|
+#     $options[:constant_fields] = v
+#   end
+# 
+#   opts.on("-r", "--raw", "Raw output, just tab delimited") do |v|
+#     $options[:raw] = v
+#   end
+# 
+#   opts.on("-n", "--no-header", "Suppress printing the header for --raw") do |v|
+#     $options[:no_hdr] = true
+#   end
+# 
+# end.parse!
+# 
+# def constant_field_names
+#   $options[:constant_fields].split(/,/).map { |pair|
+#     pair.split(/:/)[0]
+#   }
+# end
+# 
+# def constant_field_values
+#   $options[:constant_fields].split(/,/).map { |pair|
+#     pair.split(/:/)[1]
+#   }
+# end
+# 
+# fields = []
+# if $options[:fields]
+#   fields = $options[:fields].split(/,/)
+# else
+#   header_line = $stdin.readline
+#   fields = header_line.split(/\t/)
+#   fields[-1].chomp!
+# end
+# 
+# fields.unshift(*constant_field_names) if $options[:constant_fields]
+# 
+# orig_order_map = {}
+# fields.each_with_index do |field,idx|
+#   orig_order_map[field] = idx
+# end
+# sorted_fields = $options[:sort_fields] ? fields.sort : fields
+# 
+# max_width = fields.map {|f| f.size}.max
+# recno = 0
+# 
+# if $options[:raw]
+#   puts fields.join("\t") if !$options[:no_hdr]
+#   $stdin.each do |line|
+#     recno = recno + 1
+#     rec = line.split(/\t/)
+#     rec[-1].chomp!
+#     rec.unshift(*constant_field_values) if $options[:constant_fields]
+#     puts rec.join("\t")
+#   end
+#   exit 0
+# end
+# 
+# $stdin.each do |line|
+#   recno = recno + 1
+#   puts "Record[#{recno}]"
+#   rec = line.split(/\t/)
+#   rec[-1].chomp!
+#   rec.unshift(*constant_field_values) if $options[:constant_fields]
+#   rows = []
+#   sorted_fields.each_with_index do |field,idx|
+#     actual_idx = orig_order_map[field]
+#     rows << sprintf( "[% 3d] %-*s: %s\n", 1+idx, max_width, field, rec[actual_idx] )
+#   end
+#   if $options[:sort_fields]
+#     puts rows.sort
+#   else
+#     puts rows
+#   end
+#   puts ""
+# end 
 
-  opts.on("-s", "--sort", "Sort the fields before display") do |v|
-    $options[:sort_fields] = v
-  end
-
-  opts.on("-f", "--fields FIELDS", "Specify the fields as a comma delimited string") do |v|
-    $options[:fields] = v
-  end
-
-  opts.on("-c", "--const N:V,N:V,...", "Specify constant field values, always prefixed, comma separated") do |v|
-    $options[:constant_fields] = v
-  end
-
-  opts.on("-r", "--raw", "Raw output, just tab delimited") do |v|
-    $options[:raw] = v
-  end
-
-  opts.on("-n", "--no-header", "Suppress printing the header for --raw") do |v|
-    $options[:no_hdr] = true
-  end
-
-end.parse!
-
-def constant_field_names
-  $options[:constant_fields].split(/,/).map { |pair|
-    pair.split(/:/)[0]
-  }
-end
-
-def constant_field_values
-  $options[:constant_fields].split(/,/).map { |pair|
-    pair.split(/:/)[1]
-  }
-end
-
-fields = []
-if $options[:fields]
-  fields = $options[:fields].split(/,/)
-else
-  header_line = $stdin.readline
-  fields = header_line.split(/\t/)
-  fields[-1].chomp!
-end
-
-fields.unshift(*constant_field_names) if $options[:constant_fields]
-
-orig_order_map = {}
-fields.each_with_index do |field,idx|
-  orig_order_map[field] = idx
-end
-sorted_fields = $options[:sort_fields] ? fields.sort : fields
-
-max_width = fields.map {|f| f.size}.max
+uri = ARGV.shift or raise "You must speicfy a URI to view"
+inp = Abtab.read_handle uri
 recno = 0
+max_width = inp.columns.map {|f| f.size}.max
 
-if $options[:raw]
-  puts fields.join("\t") if !$options[:no_hdr]
-  $stdin.each do |line|
-    recno = recno + 1
-    rec = line.split(/\t/)
-    rec[-1].chomp!
-    rec.unshift(*constant_field_values) if $options[:constant_fields]
-    puts rec.join("\t")
-  end
-  exit 0
-end
-
-$stdin.each do |line|
+while rec = inp.next_record
+  break if rec.nil?
   recno = recno + 1
   puts "Record[#{recno}]"
-  rec = line.split(/\t/)
-  rec[-1].chomp!
-  rec.unshift(*constant_field_values) if $options[:constant_fields]
   rows = []
-  sorted_fields.each_with_index do |field,idx|
-    actual_idx = orig_order_map[field]
-    rows << sprintf( "[% 3d] %-*s: %s\n", 1+idx, max_width, field, rec[actual_idx] )
+  inp.columns.each_with_index do |field,idx|
+    rows << sprintf( "[% 3d] %-*s: %s\n", 1+idx, max_width, field, rec[idx] )
   end
-  if $options[:sort_fields]
-    puts rows.sort
-  else
-    puts rows
-  end
+
+  puts rows
   puts ""
-end
+end 

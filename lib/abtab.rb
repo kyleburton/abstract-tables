@@ -8,7 +8,7 @@ module Abtab
   end
 
   def self.open thing
-    if File.exists? thing
+    if thing !~ /^.+?:\/\//
       return self.open_file thing
     end
 
@@ -28,6 +28,12 @@ module Abtab
   def self.read_handle uri
     driver = self.open uri
     driver.open_for_reading
+    driver
+  end
+
+  def self.write_handle uri
+    driver = self.open uri
+    driver.open_for_writing
     driver
   end
 
