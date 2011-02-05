@@ -86,6 +86,15 @@ class Abtab::Driver::DbiDriver < Abtab::Driver
     end
   end
 
+  # TODO: implement insertion/append and truncation
+#  def open_for_writing
+#    close_statement_handle
+#    @columns = get_col_names @options[:table]
+#    sql_stmt = sprintf("INSERT INTO #{@options[:table]} VALUES (%s)", get_col_names.map {'?'}.join(","))
+#    puts "sql_stmt: #{sql_stmt}"
+#    @statement_handle = @conn.prepare sql_stmt
+#  end
+
   def columns
     @columns
   end
