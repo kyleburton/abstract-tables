@@ -1,18 +1,39 @@
-h1. Overview
+h1. Abstract Table Library
 
-This is a work in progres..
-
-Table abstraction.
+In the spirit of the standard Unix utilites (like cat, grep, cut, etc.), this library creates an abstraction over tabular data.  The library implements a series of drivers for sources with different encodings that act like sequences.
 
 
 h1. Command Line Utilities
 
-h2. rec-view
-
-Limitations: only understands tab delimited encoding.
+h2. atcat
 
 <pre>
-cat foo.tab | rec-view | less
+# dump a postgres table to the console (default is tab delimited)
+atcat dbi://pg/localhost/database_name/table_name
+
+# export a table to a tab file:
+atcat dbi://pg/localhost/database_name/table_name tab://table_name.tab
+
+# you an omit the schema for files, the schema will be guessed based on the file extension
+atcat dbi://pg/localhost/database_name/table_name table_name.tab
+
+# dump to csv
+atcat dbi://pg/localhost/database_name/table_name csv://table_name.csv
+# you can omit the scehma
+atcat dbi://pg/localhost/database_name/table_name table_name.csv
+
+# convert from csv to tab
+atcat csv://some-file.csv tab://some-file.tab
+
+atcat some-file.csv some-file.tab
+</pre>
+
+h2. rec-view
+
+<pre>
+rec-view tab://some-file.tab | less
+rec-view csv://some-file.csv | less
+rec-view dbi://Pg/some-file.csv | less
 </pre>
 
 h2. atcat
