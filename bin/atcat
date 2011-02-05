@@ -1,62 +1,71 @@
 #!/usr/bin/env ruby
 require 'rubygems'
-require 'dbi'
+#require 'dbi'
+require 'abtab'
 
-def handle_dbi schema, rest
-  options = {
-    :dbi_driver => nil,
-    :host       => nil,
-    :user       => nil,
-    :pass       => nil,
-    :database   => nil,
-    :table      => nil,
-  }
+#def handle_dbi schema, rest
+#  options = {
+#    :dbi_driver => nil,
+#    :host       => nil,
+#    :user       => nil,
+#    :pass       => nil,
+#    :database   => nil,
+#    :table      => nil,
+#  }
+#
+#  # expect 'driver' name, eg: pg
+#  driver, host, database_name, table = rest.split '/', 4
+#
+#  if driver =~ /@/
+#    user_pass, driver = driver.split '@', 2
+#    user, pass = nil, nil
+#    if user_pass =~ /:/
+#      user, pass = user_pass.split ':', 2
+#      options[:user] = user
+#      options[:pass] = pass
+#    end
+#    options[:dbi_driver] = driver
+#  end
+#
+#  options[:dbi_driver] = driver
+#  options[:database]   = database_name
+#  options[:host]       = host
+#  options[:table]      = table
+#
+#  # NB: this won't work with all drivers...
+#  require options[:dbi_driver].downcase
+#
+#  conn = DBI.connect("DBI:#{options[:dbi_driver]}:database=#{options[:database]};host=#{options[:host]}",options[:user],options[:pass]);
+#
+#  sth = conn.prepare "SELECT * FROM #{options[:table]} where 1=0"
+#  sth.execute
+#  col_names = sth.column_names
+#  sth.finish
+#
+#  rs = conn.select_all <<-SQL
+#  select * from #{options[:table]}
+#  SQL
+#
+#  puts col_names.join("\t")
+#  rs.each do |rec|
+#    puts rec.join("\t")
+#  end
+#end
 
-  # expect 'driver' name, eg: pg
-  driver, host, database_name, table = rest.split '/', 4
+#uri = ARGV.shift or raise "You must speicfy a URI to cat"
 
-  if driver =~ /@/
-    user_pass, driver = driver.split '@', 2
-    user, pass = nil, nil
-    if user_pass =~ /:/
-      user, pass = user_pass.split ':', 2
-      options[:user] = user
-      options[:pass] = pass
-    end
-    options[:dbi_driver] = driver
-  end
+#schema, rest = uri.split '://', 2
 
-  options[:dbi_driver] = driver
-  options[:database]   = database_name
-  options[:host]       = host
-  options[:table]      = table
-
-  # NB: this won't work with all drivers...
-  require options[:dbi_driver].downcase
-
-  conn = DBI.connect("DBI:#{options[:dbi_driver]}:database=#{options[:database]};host=#{options[:host]}",options[:user],options[:pass]);
-
-  sth = conn.prepare "SELECT * FROM #{options[:table]} where 1=0"
-  sth.execute
-  col_names = sth.column_names
-  sth.finish
-
-  rs = conn.select_all <<-SQL
-  select * from #{options[:table]}
-  SQL
-
-  puts col_names.join("\t")
-  rs.each do |rec|
-    puts rec.join("\t")
-  end
-end
-
+#if 'dbi' == schema
+#  handle_dbi schema, rest
+#else
+#  raise "Error: don't know how to handle schema: #{schema} for #{uri}"
+#end
 uri = ARGV.shift or raise "You must speicfy a URI to cat"
 
-schema, rest = uri.split '://', 2
-
-if 'dbi' == schema
-  handle_dbi schema, rest
-else
-  raise "Error: don't know how to handle schema: #{schema} for #{uri}"
+driver = Abtab.read_handle uri
+puts driver.columns.join("\t")
+while rec = driver.next_record
+  break if rec.nil?
+  puts rec.join("\t")
 end
