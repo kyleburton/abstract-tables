@@ -25,6 +25,9 @@ atcat dbi://pg/localhost/database_name/table_name table_name.csv
 # convert from csv to tab
 atcat csv://some-file.csv tab://some-file.tab
 
+# convert form csv to pipe
+atcat csv://some-file.csv 'tab://some-file.tab?col_sep=|'
+
 atcat some-file.csv some-file.tab
 </pre>
 
@@ -44,6 +47,30 @@ Limitations: only implemented 'driver' is dbi.  Only supported output port is st
 atcat dbi://user:pass@Pg/localhost/db_name/table_name | rec-view | less
 </pre>
 
+h1. Suported Drivers
+
+h2. tab
+
+Native Ruby for now.
+
+h3. col_sep
+
+Defaults to a tab character.
+
+h2. csv
+
+Via the "FasterCSV":http://fastercsv.rubyforge.org/ ruby gem.
+
+h3. col_sep
+
+Override the default ',' column seperator.
+
+h3. quote_char
+
+Override the default quote_char (").
+
 h1. License
 
 h1. Authors
+
+Kyle Burton <kyle.burton@gmail.com>

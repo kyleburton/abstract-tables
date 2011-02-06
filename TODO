@@ -1,0 +1,14 @@
+all utils:
+  import_constants
+
+atgrep
+  atgrep some://url 'any-string-in-any-field' 
+  atgrep -e '$F[0] =~ /some-pattern/' some://url
+  support -v to invert check
+
+atsort
+  Preserve header as 1st line, read from and write to any 2 urls
+  shell out to gnu sort to keep it simple
+    atsort some://url
+    atsort -r some://url
+
