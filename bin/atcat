@@ -2,9 +2,15 @@
 require 'rubygems'
 require 'abtab'
 
-uri = ARGV.shift or raise "You must speicfy a URI to cat"
+# TODO: if stdin is a pipe, open it as tab:///dev/stdin
+input_uri = nil
+if File.pipe?('/dev/stdin')
+  input_uri = 'tab:///dev/stdin'
+else
+  input_uri = ARGV.shift or raise "You must speicfy a URI to cat"
+end
 
-inp = Abtab.read_handle uri
+inp = Abtab.read_handle input_uri
 
 outp = nil
 if ARGV.empty?

@@ -17,6 +17,7 @@ class Abtab::Driver::TabDriver < Abtab::Driver
   end
 
   def parse_line l
+    l.chomp!
     r = l.split("\t").map do |f|
       f.gsub! "\\t", "\t"
       f.gsub! "\\n", "\n"

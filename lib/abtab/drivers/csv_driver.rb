@@ -1,5 +1,5 @@
 require 'fastercsv'
-#require 'uri/escape'
+require 'uri'
 
 class Abtab::Driver::CSVDriver < Abtab::Driver
   def initialize url
@@ -12,20 +12,24 @@ class Abtab::Driver::CSVDriver < Abtab::Driver
     if qs
       qs.split(/[;&]/).each do |pair|
         k,v = pair.split '='
-        k = URI::Escape.unescape k
-        v = URI::Escape.unescape v
-        @options[k] << v
+        k = URI.unescape k
+        v = URI.unescape v
+        @options[k] = v
       end
     end
     #puts "CSV: options=#{@options.inspect}"
   end
 
   def open_for_reading
-    if !File.exists? @file
-      raise "Error: can not open for reading, file does not exist: #{@file}"
+    if @file == '/dev/stdin'
+      @read_fh = $stdin
+    else
+      if !File.exists? @file
+        raise "Error: can not open for reading, file does not exist: #{@file}"
+      end
+      @read_fh = File.open(@file,'r')
     end
 
-    @read_fh = File.open(@file,'r')
     header_line = @read_fh.readline
     header_line.chomp!
     @columns = FasterCSV.parse(header_line, :quote_char => @options["quote_char"], :col_sep => @options["col_sep"]).first
@@ -51,12 +55,17 @@ class Abtab::Driver::CSVDriver < Abtab::Driver
 
   def open_for_writing
     # NB: truncates the output file
-    @write_fh = File.open(@file,'w')
+    if @file == '/dev/stdout'
+      @write_fn = $stdout
+    else
+      @write_fh = File.open(@file,'w')
+    end
     set_columns(@columns) if @columns && !@columns.empty
   end
 
   def write_record rec
-    @write_fh.puts rec.to_csv
+    line = rec.to_csv(:quote_char => @options["quote_char"], :col_sep => @options["col_sep"])
+    @write_fh.puts line
   end
 
   def set_columns cols
