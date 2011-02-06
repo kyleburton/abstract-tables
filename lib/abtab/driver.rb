@@ -6,5 +6,23 @@ module Abtab
         write_record rec
       end
     end
+
+    def url_parse url
+      schema, rest = url.split '://', 2
+      path, qs = rest.split '?', 2
+      options = {
+        "quote_char" => '"',
+        "col_sep"    => ','
+      }
+      if qs
+        qs.split(/[;&]/).each do |pair|
+          k,v = pair.split '='
+          k = URI.unescape k
+          v = URI.unescape v
+          options[k] = v
+        end
+      end
+      return schema, path, options
+    end
   end
 end

@@ -3,21 +3,7 @@ require 'uri'
 
 class Abtab::Driver::CSVDriver < Abtab::Driver
   def initialize url
-    @schema, rest = url.split '://', 2
-    @file, qs = rest.split '?', 2
-    @options = {
-      "quote_char" => '"',
-      "col_sep"    => ','
-    }
-    if qs
-      qs.split(/[;&]/).each do |pair|
-        k,v = pair.split '='
-        k = URI.unescape k
-        v = URI.unescape v
-        @options[k] = v
-      end
-    end
-    #puts "CSV: options=#{@options.inspect}"
+    @schema, @file, @options = url_parse url
   end
 
   def open_for_reading

@@ -2,8 +2,9 @@ require 'fastercsv'
 
 class Abtab::Driver::TabDriver < Abtab::Driver
   def initialize url
-    @schema, rest = url.split '://', 2
-    @file, qs = rest.split '?', 2
+    @options = {}
+    @options["col_sep"] = "\t"
+    @schema, @file, @options = url_parse url
   end
 
   def open_for_reading
@@ -18,7 +19,7 @@ class Abtab::Driver::TabDriver < Abtab::Driver
 
   def parse_line l
     l.chomp!
-    r = l.split("\t").map do |f|
+    r = l.split(@options["col_sep"]).map do |f|
       f.gsub! "\\t", "\t"
       f.gsub! "\\n", "\n"
       f.gsub! "\\r", "\r"
@@ -34,7 +35,7 @@ class Abtab::Driver::TabDriver < Abtab::Driver
       f.gsub! "\n", "\\n"
       f.gsub! "\r", "\\r"
       f
-    end.join("\t")
+    end.join(@options["col_sep"])
   end
 
   def columns
