@@ -1,10 +1,9 @@
-require 'fastercsv'
 
 class Abtab::Driver::TabDriver < Abtab::Driver
   def initialize url
     @options = {}
     @options["col_sep"] = "\t"
-    @schema, @file, @options = url_parse url
+    @schema, @file, @options = url_parse url, @options
   end
 
   def open_for_reading

@@ -7,13 +7,9 @@ module Abtab
       end
     end
 
-    def url_parse url
+    def url_parse url, options={}
       schema, rest = url.split '://', 2
       path, qs = rest.split '?', 2
-      options = {
-        "quote_char" => '"',
-        "col_sep"    => ','
-      }
       if qs
         qs.split(/[;&]/).each do |pair|
           k,v = pair.split '='

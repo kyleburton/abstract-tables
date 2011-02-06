@@ -3,7 +3,11 @@ require 'uri'
 
 class Abtab::Driver::CSVDriver < Abtab::Driver
   def initialize url
-    @schema, @file, @options = url_parse url
+    options = {
+      "quote_char" => '"',
+      "col_sep"    => ','
+    }
+    @schema, @file, @options = url_parse url, options
   end
 
   def open_for_reading
