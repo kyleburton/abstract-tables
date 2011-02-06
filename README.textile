@@ -14,7 +14,7 @@ atcat dbi://pg/localhost/database_name/table_name
 # export a table to a tab file:
 atcat dbi://pg/localhost/database_name/table_name tab://table_name.tab
 
-# you an omit the schema for files, the schema will be guessed based on the file extension
+# you can omit the schema for files, the schema will be guessed based on the file extension
 atcat dbi://pg/localhost/database_name/table_name table_name.tab
 
 # dump to csv
@@ -25,10 +25,10 @@ atcat dbi://pg/localhost/database_name/table_name table_name.csv
 # convert from csv to tab
 atcat csv://some-file.csv tab://some-file.tab
 
+atcat some-file.csv some-file.tab
+
 # convert form csv to pipe
 atcat csv://some-file.csv 'tab://some-file.tab?col_sep=|'
-
-atcat some-file.csv some-file.tab
 </pre>
 
 h2. rec-view
