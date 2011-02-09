@@ -12,3 +12,6 @@ atsort
     atsort some://url
     atsort -r some://url
 
+implement a method_missing : respond_to? ("import_#{other_schema}") and "export_#{other_schema}"
+  allow the databse drivers to use their import/export features when they recognize
+  that it's a simple format and going to/from a file.

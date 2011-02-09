@@ -1,0 +1,50 @@
+I came to Ruby by way of Perl.
+
+  The Perl archipelligo, Wall Island, Chiristiansen, Schwartz, Conway
+
+* gasp *
+
+I started with Perl 4 in order to customize the installation of Windows NT so
+that it could be automated.
+
+This involved heavy use of regular expressions.
+
+  Mom: "Bobby, we need to talk"
+       "What's is Mom?"                  : Bobby
+  Mom: "A freiend's mother said
+        other kids at school
+        have been expeirmenting
+        with the regexes..."
+       "It's no big deal Mom, they're    : Bobby
+        just =~ /(posix|pcre)/ims"
+  Mom: "OMG, you're taking the regex!"
+
+Why regexes?
+
+  Some people, when confronted with a problem, think "I know, I'll use regular
+  expressions." Now they have two problems.  
+
+     -- Jamie Zawinski
+
+Regexes are a key that unlocks data
+
+  Find/Comission a graphic of a key-shaped word 'regex' and the word 'data' shaped
+  as an old style padlock (where the key goes in the front/middle)?
+
+When I worked at Health Market Science, Ben Kennedy and I were asked to help
+out our data delivery department with a client job that was taking at the time
+about 48hrs to process.
+
+During that time we happened upon the idea of a suite of command line tools and
+a library which abstracted away file encodings and how tables of data were to
+be represnted.  
+
+Some clients wanted tab files, some csv, some pipe delimited, some Excel and
+others MS Access databse files.
+
+The other idea that we stumbled upon was to use a URL to represent both the
+location of the table's data and its encoding.  This meant the command line utilities and the libraries coudl be written to 
+
+  Picture(s):
+    URI: Yuri Gregarin
+    URL: the Ural Mountains
