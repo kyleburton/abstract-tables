@@ -43,7 +43,7 @@ Some clients wanted tab files, some csv, some pipe delimited, some Excel and
 others MS Access databse files.
 
 The other idea that we stumbled upon was to use a URL to represent both the
-location of the table's data and its encoding.  This meant the command line utilities and the libraries coudl be written to 
+location of the table's data and its encoding.  This meant the command line utilities and the libraries coudl be written to outputs, 
 
   Picture(s):
     URI: Yuri Gregarin
