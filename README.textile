@@ -31,12 +31,14 @@ atcat some-file.csv some-file.tab
 atcat csv://some-file.csv 'tab://some-file.tab?col_sep=|'
 </pre>
 
-h2. rec-view
+h2. atview
 
 <pre>
-rec-view tab://some-file.tab | less
-rec-view csv://some-file.csv | less
-rec-view dbi://Pg/some-file.csv | less
+atview tab://some-file.tab | less
+atview csv://some-file.csv | less
+atview dbi://pg/localhost/database_name/table_name | less
+# view a list of tables:
+atview dbi://pg/localhost/database_name | less
 </pre>
 
 h2. atcat
@@ -44,7 +46,15 @@ h2. atcat
 Limitations: only implemented 'driver' is dbi.  Only supported output port is stdout as tab delimited.
 
 <pre>
-atcat dbi://user:pass@Pg/localhost/db_name/table_name | rec-view | less
+atcat dbi://user:pass@Pg/localhost/db_name/table_name | atview | less
+</pre>
+
+h2. atgrep
+
+Filter a table source by passing an expression, which has access to the record via the var @r@:
+
+<pre>
+atgrep -e 'r[0] == "this"' test/fixtures/files/file1.csv | atview
 </pre>
 
 h1. Suported Drivers

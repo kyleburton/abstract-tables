@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'abtab'
+require 'abtab/filter/grep'
+require 'base_app'
+
+class GrepApp < BaseApp
+  def command_line_arguments
+    super.concat [
+      ['e','expression','Grep Expression',true]
+    ]
+  end
+
+  def run
+    input_uri = nil
+    if File.pipe?('/dev/stdin')
+      input_uri = 'tab:///dev/stdin'
+    else
+      input_uri = ARGV.shift or raise "You must speicfy a URI to grep"
+    end
+
+    flt = Abtab::Filter::Grep.new input_uri
+    flt.open_for_reading
+    # TODO: getopt args for 
+    proc = eval("Proc.new {|r| #{self.expression} }")
+    flt.filter_predicate = proc
+    #puts "flt=#{flt}"
+
+    outp = nil
+    if ARGV.empty?
+      outp = Abtab.write_handle 'tab:///dev/stdout'
+    else
+      outp = Abtab.write_handle ARGV.shift
+    end
+
+    outp.import flt
+  end
+end
+
+if $0 == __FILE__
+  GrepApp.main
+end
