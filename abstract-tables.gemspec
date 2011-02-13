@@ -2,7 +2,7 @@ require 'rubygems'
 
 SPEC = Gem::Specification.new do |s|
   s.name = "abstract-tables"
-  s.version = "1.0.0"
+  s.version = "1.0.1"
   s.date = '2011-02-09'
   s.authors = ["Kyle Burton"]
   s.email = "kyle.burton@gmail.com"
@@ -26,11 +26,14 @@ DESC
     abstract-tables.gemspec
     bin/atcat
     bin/atview
+    bin/grep
     introducing-abtab/README.textile
     lib/abtab/driver.rb
     lib/abtab/drivers/csv_driver.rb
     lib/abtab/drivers/dbi_driver.rb
     lib/abtab/drivers/tab_driver.rb
+    lib/abtab/filter/grep.rb
+    lib/abtab/filter.rb
     lib/abtab.rb
     README.textile
     test/fixtures/files/file1.csv
