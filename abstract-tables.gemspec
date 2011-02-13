@@ -22,11 +22,10 @@ DESC
   s.summary = "Table Abstraction as a URI : Record Streams, Filters, ETL Ginsu"
   s.homepage = "http://github.com/kyleburton/abstract-tables"
   s.files = %w[
-    abstract-tables-1.0.0.gem
     abstract-tables.gemspec
     bin/atcat
     bin/atview
-    bin/grep
+    bin/atgrep
     introducing-abtab/README.textile
     lib/abtab/driver.rb
     lib/abtab/drivers/csv_driver.rb
