@@ -9,6 +9,8 @@ h2. atcat
 
 <pre>
 # dump a postgres table to the console (default is tab delimited)
+atcat dbi://user:pass@Pg/localhost/db_name/table_name | atview | less
+# if you create an $HOME/.abtab.dbrc  (see below), you can omit the user/pass:
 atcat dbi://pg/localhost/database_name/table_name
 
 # export a table to a tab file:
@@ -41,12 +43,6 @@ atview dbi://pg/localhost/database_name/table_name | less
 atview dbi://pg/localhost/database_name | less
 </pre>
 
-h2. atcat
-
-Limitations: only implemented 'driver' is dbi.  Only supported output port is stdout as tab delimited.
-
-<pre>
-atcat dbi://user:pass@Pg/localhost/db_name/table_name | atview | less
 </pre>
 
 h2. atgrep
@@ -78,6 +74,30 @@ Override the default ',' column seperator.
 h3. quote_char
 
 Override the default quote_char (").
+
+h2. dbi
+
+(only tested with PostgreSQL)
+
+h3. @$HOME/.abtab.dbrc@
+
+With the dbi driver, you can create the file @.abtab.dbrc@ in your home directory and include the connection credentails for the databases you commonly use.  It must be a YAML file, you can create it from a ruby script or irb with:
+
+<pre>
+require 'yaml'
+
+cfg = { 
+  "localhost" => {
+    "database_name" => {
+      "user" => "username",
+      "pass" => "password" 
+    }
+  }
+}
+File.open("#{ENV['HOME']}/.abtab.dbrc","w") do |f|
+  f.puts cfg.to_yaml
+end
+</pre>
 
 h1. License
 
