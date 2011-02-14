@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'abtab'
+require 'abtab/filter/cut'
+require 'base_app'
+
+class CutApp < BaseApp
+  def command_line_arguments
+    super.concat [
+      ['c','columns','Columns to cut',true]
+    ]
+  end
+
+  def run
+    input_uri = nil
+    if File.pipe?('/dev/stdin')
+      input_uri = 'tab:///dev/stdin'
+    else
+      input_uri = ARGV.shift or raise "You must speicfy a URI to grep"
+    end
+
+    flt = Abtab::Filter::Cut.new input_uri
+    flt.open_for_reading
+    flt.set_cut_column_spec self.columns
+    flt.set_columns inp.columns
+
+    outp = nil
+    if ARGV.empty?
+      outp = Abtab.write_handle 'tab:///dev/stdout'
+    else
+      outp = Abtab.write_handle ARGV.shift
+    end
+
+    outp.import flt
+  end
+end
+
+if $0 == __FILE__
+  CutApp.main
+end
+

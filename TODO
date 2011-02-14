@@ -1,10 +1,9 @@
 all utils:
   import_constants
 
-atgrep
-  atgrep some://url 'any-string-in-any-field' 
-  atgrep -e '$F[0] =~ /some-pattern/' some://url
-  support -v to invert check
+all filters:
+ change how filters work, they should not know about URIs, they should take a (read) initialized driver 
+ and act as a filter over that driver - they don't have exactly the same interface as normal drivers
 
 atsort
   Preserve header as 1st line, read from and write to any 2 urls

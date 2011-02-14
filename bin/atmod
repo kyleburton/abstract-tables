@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'abtab'
+require 'abtab/filter/mod'
+require 'base_app'
+
+class ModApp < BaseApp
+  def command_line_arguments
+    super.concat [
+      ['e','expression','Mod Expression',true]
+    ]
+  end
+
+  def run
+    input_uri = nil
+    if File.pipe?('/dev/stdin')
+      input_uri = 'tab:///dev/stdin'
+    else
+      input_uri = ARGV.shift or raise "You must speicfy a URI to grep"
+    end
+
+    flt = Abtab::Filter::Mod.new input_uri
+    flt.open_for_reading
+    p = eval("Proc.new {|r| #{self.expression} }")
+    flt.mod_fn = p
+
+    outp = nil
+    if ARGV.empty?
+      outp = Abtab.write_handle 'tab:///dev/stdout'
+    else
+      outp = Abtab.write_handle ARGV.shift
+    end
+
+    outp.import flt
+  end
+end
+
+if $0 == __FILE__
+  ModApp.main
+end
+

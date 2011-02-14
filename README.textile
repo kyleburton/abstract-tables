@@ -51,6 +51,11 @@ Filter a table source by passing an expression, which has access to the record v
 
 <pre>
 atgrep -e 'r[0] == "this"' test/fixtures/files/file1.csv | atview
+
+# ruby is mutable, so if you feel like being naughty, you can modify during the grep:
+atgrep -e 'r[0] = r[0].upcase; r[0] == "THIS"' test/fixtures/files/file1.csv
+
+# but that's what atmod is for...
 </pre>
 
 h1. Suported Drivers
