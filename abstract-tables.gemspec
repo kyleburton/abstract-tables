@@ -2,8 +2,8 @@ require 'rubygems'
 
 SPEC = Gem::Specification.new do |s|
   s.name = "abstract-tables"
-  s.version = "1.0.1"
-  s.date = '2011-02-09'
+  s.version = "1.0.2"
+  s.date = '2011-02-15'
   s.authors = ["Kyle Burton"]
   s.email = "kyle.burton@gmail.com"
   s.platform = Gem::Platform::RUBY
@@ -31,6 +31,7 @@ DESC
     lib/abtab/drivers/csv_driver.rb
     lib/abtab/drivers/dbi_driver.rb
     lib/abtab/drivers/tab_driver.rb
+    lib/abtab/drivers/xls_driver.rb
     lib/abtab/filter/grep.rb
     lib/abtab/filter.rb
     lib/abtab.rb
