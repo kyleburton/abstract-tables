@@ -117,7 +117,7 @@ require 'optparse'
 #   puts ""
 # end 
 
-uri = ARGV.shift or raise "You must speicfy a URI to view"
+uri = ARGV.shift || "tab:///dev/stdin"
 inp = Abtab.read_handle uri
 recno = 0
 max_width = inp.columns.map {|f| f.size}.max
