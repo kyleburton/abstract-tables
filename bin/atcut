@@ -7,7 +7,7 @@ require 'base_app'
 class CutApp < BaseApp
   def command_line_arguments
     super.concat [
-      ['c','columns','Columns to cut',true]
+      ['f','fields=','Fields to cut (include in the output)',true]
     ]
   end
 
@@ -19,10 +19,10 @@ class CutApp < BaseApp
       input_uri = ARGV.shift or raise "You must speicfy a URI to grep"
     end
 
-    flt = Abtab::Filter::Cut.new input_uri
-    flt.open_for_reading
-    flt.set_cut_column_spec self.columns
-    flt.set_columns inp.columns
+    inp = Abtab.read_handle input_uri
+    flt = Abtab::Filter::Cut.new inp
+    flt.set_cut_column_spec self.fields
+    #flt.set_columns inp.columns
 
     outp = nil
     if ARGV.empty?

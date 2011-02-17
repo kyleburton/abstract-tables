@@ -7,7 +7,8 @@ require 'base_app'
 class GrepApp < BaseApp
   def command_line_arguments
     super.concat [
-      ['e','expression','Grep Expression',true]
+      ['e','expression=s','Grep Expression',true],
+      ['v','invert','Invert the predicate']
     ]
   end
 
@@ -19,12 +20,10 @@ class GrepApp < BaseApp
       input_uri = ARGV.shift or raise "You must speicfy a URI to grep"
     end
 
-    flt = Abtab::Filter::Grep.new input_uri
-    flt.open_for_reading
-    # TODO: getopt args for 
-    proc = eval("Proc.new {|r| #{self.expression} }")
-    flt.filter_predicate = proc
-    #puts "flt=#{flt}"
+    flt = Abtab::Filter::Grep.new Abtab.read_handle input_uri
+    inv = self.invert ? "!" : ""
+    pred = eval("Proc.new {|r| #{inv}(#{self.expression}) }")
+    flt.filter_predicate = pred
 
     outp = nil
     if ARGV.empty?
