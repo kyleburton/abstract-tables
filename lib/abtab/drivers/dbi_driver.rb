@@ -132,7 +132,7 @@ class Abtab::Driver::DbiDriver < Abtab::Driver
 
   def close_connection
     if @conn
-      @conn.close
+      @conn.close if @conn.respond_to? :close
       @conn = nil
     end
   end

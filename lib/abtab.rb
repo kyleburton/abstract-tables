@@ -47,6 +47,10 @@ module Abtab
       return self.open "csv://#{thing}"
     end
 
+    if thing =~ /.xls$/
+      return self.open "xls://#{thing}"
+    end
+
     # tab delimited is the default
     return self.open "tab://#{thing}"
   end

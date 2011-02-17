@@ -2,7 +2,7 @@ require 'rubygems'
 
 SPEC = Gem::Specification.new do |s|
   s.name = "abstract-tables"
-  s.version = "1.0.3"
+  s.version = "1.0.4"
   s.date = '2011-02-15'
   s.authors = ["Kyle Burton"]
   s.email = "kyle.burton@gmail.com"
