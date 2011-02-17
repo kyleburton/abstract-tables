@@ -58,6 +58,15 @@ atgrep -e 'r[0] = r[0].upcase; r[0] == "THIS"' test/fixtures/files/file1.csv
 # but that's what atmod is for...
 </pre>
 
+h2. atcut
+
+Filter a source, selecting specific columns.
+
+<pre>
+# pull only the first and 3rd column:
+bin/atcut -f 1,3 test/fixtures/files/file1.tab
+<pre>
+
 h1. Suported Drivers
 
 h2. tab
