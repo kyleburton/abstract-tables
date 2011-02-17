@@ -19,7 +19,7 @@ else
   outp = Abtab.write_handle ARGV.shift
 end
 
-outp.set_columns inp.columns
-
 outp.import inp
 
+outp.close
+inp.close
