@@ -30,6 +30,7 @@ class Abtab::Driver::TabDriver < Abtab::Driver
 
   def format_rec r
     r.map do |f|
+      f = f.to_s
       f.gsub! "\t", "\\t"
       f.gsub! "\n", "\\n"
       f.gsub! "\r", "\\r"

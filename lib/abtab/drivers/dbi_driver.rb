@@ -6,7 +6,7 @@ class Abtab::Driver::DbiDriver < Abtab::Driver
 
   DB_MODULES = {
     'Pg'      => { :require => 'Pg', :name => 'Pg' },
-    'pg'      => { :require => 'Pg', :name => 'Pg' },
+    'pg'      => { :require => 'pg', :name => 'Pg' },
     # TODO: test these
     #'mysql'   => 'mysql',
     #'Mysql'   => 'mysql',
