@@ -36,6 +36,6 @@ class GrepApp < BaseApp
   end
 end
 
-if $0 == __FILE__
+#if $0 == __FILE__
   GrepApp.main
-end
+#end

@@ -35,7 +35,7 @@ class ModApp < BaseApp
   end
 end
 
-if $0 == __FILE__
+#if $0 == __FILE__
   ModApp.main
-end
+#end
 

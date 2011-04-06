@@ -40,11 +40,12 @@ DESC
     test/fixtures/files/file1.tab
   ]
   puts "all files: #{s.files.inspect}"
-  s.executables = %w[atcat atview]
+  s.executables = %w[atcat atcut atgrep atmod atview]
   s.require_paths = %w[lib bin]
   s.extra_rdoc_files = %w[README.textile] #  LICENSE]
   s.add_runtime_dependency('dbi', [">= 0.4.5"])
   s.add_runtime_dependency('spreadsheet', [">= 0.6.5.2"])
   s.add_runtime_dependency('fastercsv', [">= 1.5.4"])
+  s.add_runtime_dependency('base_app', [">= 1.0.5"])
   s.has_rdoc = false
 end

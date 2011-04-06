@@ -35,7 +35,7 @@ class CutApp < BaseApp
   end
 end
 
-if $0 == __FILE__
+#if $0 == __FILE__
   CutApp.main
-end
+#end
 
