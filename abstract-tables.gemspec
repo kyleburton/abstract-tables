@@ -45,5 +45,6 @@ DESC
   s.extra_rdoc_files = %w[README.textile] #  LICENSE]
   s.add_runtime_dependency('dbi', [">= 0.4.5"])
   s.add_runtime_dependency('spreadsheet', [">= 0.6.5.2"])
+  s.add_runtime_dependency('fastercsv', [">= 1.5.4"])
   s.has_rdoc = false
 end
