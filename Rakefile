@@ -23,3 +23,11 @@ task :build do
   use_sudo = gem_bin.start_with?(ENV['HOME']) ? "" : "sudo"
   system "gem build #{gemspec_file} && #{use_sudo} gem install #{gemfile_basename}-*.gem" 
 end
+
+desc "push the gem"
+task :push do
+  gemspec = "abstract-tables.gemspec"
+  gemspec_file = File.basename(gemspec)
+  gemfile_basename = File.basename(gemspec_file,'.gemspec')
+  system "gem push #{gemfile_basename}-*.gem" 
+end
